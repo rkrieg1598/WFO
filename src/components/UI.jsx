@@ -39,7 +39,6 @@ export function TopBar({ title }) {
         </div>
       </div>
 
-      {/* Always-visible floating menu button */}
       <button onClick={() => setOpen(true)} aria-label="Menu" style={{
         position: 'fixed', top: 16, right: 'max(16px, calc(50vw - 244px))', zIndex: 50,
         background: 'var(--gold)', border: '3px solid var(--ink)', borderRadius: 12,
@@ -52,35 +51,49 @@ export function TopBar({ title }) {
           position: 'fixed', inset: 0, background: 'rgba(13,92,87,.55)', zIndex: 60,
           backdropFilter: 'blur(2px)',
         }}>
-          <div onClick={(e) => e.stopPropagation()} className="rise" style={{
-            position: 'absolute', top: 0, right: 0, bottom: 0, width: 'min(82%,320px)',
-            background: 'var(--cream-soft)', borderLeft: '3px solid var(--ink)', padding: 20,
-            display: 'flex', flexDirection: 'column', gap: 10,
+          <div onClick={(e) => e.stopPropagation()} style={{
+            position: 'absolute', top: 0, right: 0, bottom: 0, height: '100%',
+            width: 'min(82%,320px)',
+            background: 'var(--cream-soft)', borderLeft: '3px solid var(--ink)',
+            display: 'flex', flexDirection: 'column', overflow: 'hidden',
           }}>
-            <div className="between">
-              <span className="postcard-title" style={{ fontSize: 24 }}>Menu</span>
-              <button onClick={() => setOpen(false)} className="btn btn-ghost btn-sm">✕</button>
+            <div style={{ padding: '20px 20px 0', flexShrink: 0 }}>
+              <div className="between">
+                <span className="postcard-title" style={{ fontSize: 24 }}>Menu</span>
+                <button onClick={() => setOpen(false)} className="btn btn-ghost btn-sm">✕</button>
+              </div>
+              <div className="divider" />
             </div>
-            <div className="divider" />
-            {[
-              { to: '/', icon: '🏠', label: 'Home' },
-              { to: '/standings', icon: '🏆', label: 'Progress Tracker' },
-              { to: '/instructions', icon: '📋', label: 'Instructions & Maps' },
-              { to: '/gallery', icon: '📸', label: 'Photo Gallery' },
-              { to: '/profile', icon: '🌴', label: 'My Profile' },
-              { to: '/scavenger', icon: '🔍', label: 'Scavenger Hunt' },
-            ].map((m) => (
-              <button key={m.to} onClick={() => { setOpen(false); nav(m.to) }} className="btn btn-sky" style={{ justifyContent: 'flex-start' }}>
-                <span style={{ fontSize: 20 }}>{m.icon}</span> {m.label}
-              </button>
-            ))}
-            {isAdmin && (
-              <button onClick={() => { setOpen(false); nav('/admin') }} className="btn btn-coral" style={{ justifyContent: 'flex-start' }}>
-                <span style={{ fontSize: 20 }}>🛠️</span> Admin Panel
-              </button>
-            )}
-            <div style={{ flex: 1 }} />
-            <button onClick={() => { setOpen(false); signOut() }} className="btn btn-ghost">Sign Out</button>
+
+            <div style={{
+              flex: 1, minHeight: 0, overflowY: 'auto', padding: '0 20px',
+              display: 'flex', flexDirection: 'column', gap: 10,
+              scrollbarWidth: 'thin', scrollbarColor: 'var(--teal) transparent',
+            }}>
+              {[
+                { to: '/', icon: '🏠', label: 'Home' },
+                { to: '/schedule', icon: '🗓️', label: 'Event Schedule' },
+                { to: '/standings', icon: '🏆', label: 'Progress Tracker' },
+                { to: '/instructions', icon: '📋', label: 'Instructions & Maps' },
+                { to: '/gallery', icon: '📸', label: 'Photo Gallery' },
+                { to: '/profile', icon: '🌴', label: 'My Profile' },
+                { to: '/scavenger', icon: '🔍', label: 'Scavenger Hunt' },
+              ].map((m) => (
+                <button key={m.to} onClick={() => { setOpen(false); nav(m.to) }} className="btn btn-sky" style={{ justifyContent: 'flex-start' }}>
+                  <span style={{ fontSize: 20 }}>{m.icon}</span> {m.label}
+                </button>
+              ))}
+              {isAdmin && (
+                <button onClick={() => { setOpen(false); nav('/admin') }} className="btn btn-coral" style={{ justifyContent: 'flex-start' }}>
+                  <span style={{ fontSize: 20 }}>🛠️</span> Admin Panel
+                </button>
+              )}
+              <div style={{ height: 8 }} />
+            </div>
+
+            <div style={{ padding: '12px 20px 24px', flexShrink: 0, borderTop: '2px solid rgba(31,58,61,.1)' }}>
+              <button onClick={() => { setOpen(false); signOut() }} className="btn btn-ghost">Sign Out</button>
+            </div>
           </div>
         </div>
       )}
