@@ -1,0 +1,183 @@
+/* ============================================================
+   WHITE FAMILY OLYMPICS — Vintage Florida Design System
+   ============================================================ */
+
+:root {
+  /* Core palette — pulled from vintage FL travel posters */
+  --teal:        #1ba39c;
+  --teal-deep:   #14807a;
+  --teal-dark:   #0d5c57;
+  --sea:         #2bb8af;
+  --coral:       #f0563f;
+  --coral-deep:  #d33d28;
+  --tomato:      #e8412c;
+  --gold:        #f6a623;
+  --gold-deep:   #e08c0b;
+  --sun:         #ffcf4d;
+  --cream:       #f7efd8;
+  --cream-soft:  #fbf6e8;
+  --sky:         #8fcfe6;
+  --sky-deep:    #4ba3c7;
+  --powder:      #bfe3ee;
+  --ink:         #1f3a3d;
+  --ink-soft:    #2f5457;
+
+  --shadow-hard: 4px 4px 0 rgba(31,58,61,0.85);
+  --shadow-soft: 0 10px 30px rgba(13,92,87,0.18);
+  --radius:      18px;
+  --radius-sm:   12px;
+
+  --font-script:  'Pacifico', cursive;
+  --font-display: 'Bowlby One SC', sans-serif;
+  --font-serif:   'DM Serif Display', serif;
+  --font-body:    'Archivo', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+html, body, #root { height: 100%; }
+
+body {
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--teal);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+/* Sunny dotted atmosphere behind everything */
+.app-bg {
+  position: fixed; inset: 0; z-index: -2;
+  background:
+    radial-gradient(circle at 50% -10%, var(--sun) 0%, var(--gold) 16%, transparent 42%),
+    linear-gradient(180deg, var(--sea) 0%, var(--teal) 45%, var(--teal-deep) 100%);
+}
+.app-bg::after {
+  content: ""; position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.14) 1.5px, transparent 1.6px);
+  background-size: 22px 22px;
+  opacity: 0.6;
+}
+
+/* ---------- Layout ---------- */
+.screen {
+  max-width: 520px; margin: 0 auto; min-height: 100%;
+  padding: 0 16px 48px; position: relative;
+}
+.page-pad { padding-top: 18px; }
+
+/* ---------- Typography helpers ---------- */
+.script { font-family: var(--font-script); font-weight: 400; }
+.display { font-family: var(--font-display); letter-spacing: 0.5px; }
+.serif { font-family: var(--font-serif); }
+
+.eyebrow {
+  font-weight: 800; text-transform: uppercase; letter-spacing: 2.5px;
+  font-size: 12px; color: var(--gold-deep);
+}
+
+/* Big postcard-style title with layered shadow */
+.postcard-title {
+  font-family: var(--font-display);
+  color: var(--cream);
+  font-size: clamp(34px, 11vw, 52px);
+  line-height: 0.95;
+  text-transform: uppercase;
+  text-shadow:
+    2px 2px 0 var(--coral-deep),
+    4px 4px 0 var(--ink);
+  -webkit-text-stroke: 1px var(--ink);
+}
+
+/* ---------- Cards ---------- */
+.card {
+  background: var(--cream-soft);
+  border: 3px solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-hard);
+  padding: 18px;
+}
+.card-flat {
+  background: var(--cream-soft);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  font-family: var(--font-display);
+  font-size: 16px; letter-spacing: 0.5px;
+  border: 3px solid var(--ink);
+  border-radius: 999px;
+  padding: 14px 22px;
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%;
+  box-shadow: var(--shadow-hard);
+  transition: transform .08s ease, box-shadow .08s ease;
+  text-decoration: none;
+}
+.btn:active { transform: translate(3px,3px); box-shadow: 1px 1px 0 rgba(31,58,61,0.85); }
+.btn-coral { background: var(--coral); color: var(--cream); }
+.btn-gold  { background: var(--gold); color: var(--ink); }
+.btn-teal  { background: var(--teal); color: var(--cream); }
+.btn-sky   { background: var(--sky); color: var(--ink); }
+.btn-ghost { background: transparent; color: var(--ink); box-shadow: none; border-width: 2px; }
+.btn-sm { padding: 9px 16px; font-size: 13px; width: auto; box-shadow: var(--shadow-hard); }
+
+/* ---------- Inputs ---------- */
+.field { margin-bottom: 14px; }
+.label {
+  display: block; font-weight: 800; font-size: 13px; text-transform: uppercase;
+  letter-spacing: 1px; margin-bottom: 6px; color: var(--ink-soft);
+}
+.input, .textarea {
+  width: 100%; font-family: var(--font-body); font-size: 16px;
+  border: 2px solid var(--ink); border-radius: 12px;
+  padding: 13px 14px; background: #fff; color: var(--ink);
+}
+.input:focus, .textarea:focus { outline: 3px solid var(--gold); }
+.textarea { resize: vertical; min-height: 80px; }
+
+/* ---------- Pills / badges ---------- */
+.pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+  padding: 5px 11px; border-radius: 999px; border: 2px solid var(--ink);
+}
+.pill-gold { background: var(--sun); color: var(--ink); }
+.pill-coral { background: var(--coral); color: var(--cream); }
+.pill-teal { background: var(--teal); color: var(--cream); }
+
+/* ---------- Utility ---------- */
+.row { display: flex; align-items: center; gap: 12px; }
+.between { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.stack > * + * { margin-top: 12px; }
+.center { text-align: center; }
+.muted { color: var(--ink-soft); opacity: 0.85; }
+.mt8{margin-top:8px}.mt16{margin-top:16px}.mt24{margin-top:24px}
+.divider { height: 2px; background: repeating-linear-gradient(90deg, var(--ink) 0 8px, transparent 8px 16px); opacity: .3; border: 0; margin: 16px 0; }
+
+/* scalloped edge decoration */
+.scallop { height: 14px; background:
+  radial-gradient(circle at 10px -2px, transparent 9px, var(--cream-soft) 10px) 0 0 / 20px 14px repeat-x; }
+
+/* ---------- Animations ---------- */
+@keyframes pop { 0%{transform:scale(.92);opacity:0} 100%{transform:scale(1);opacity:1} }
+@keyframes rise { 0%{transform:translateY(14px);opacity:0} 100%{transform:translateY(0);opacity:1} }
+@keyframes swayy { 0%,100%{transform:rotate(-2deg)} 50%{transform:rotate(2deg)} }
+.rise { animation: rise .5s cubic-bezier(.2,.8,.2,1) both; }
+.rise-1{animation-delay:.05s}.rise-2{animation-delay:.12s}.rise-3{animation-delay:.19s}
+.rise-4{animation-delay:.26s}.rise-5{animation-delay:.33s}.rise-6{animation-delay:.40s}
+.pop { animation: pop .4s cubic-bezier(.2,.9,.3,1.3) both; }
+
+/* ---------- Loading ---------- */
+.loader { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:60vh; gap:16px; }
+.sun-spin { width:54px; height:54px; border-radius:50%; background: var(--sun);
+  box-shadow: 0 0 0 4px var(--ink), 0 0 0 10px var(--gold);
+  animation: swayy 1.4s ease-in-out infinite; }
+
+/* hide scrollbars on horizontal rails */
+.rail { display:flex; gap:12px; overflow-x:auto; padding-bottom:6px; scrollbar-width:none; }
+.rail::-webkit-scrollbar{ display:none; }

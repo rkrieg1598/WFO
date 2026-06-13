@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2bb8af"/><stop offset="1" stop-color="#14807a"/>
+    </linearGradient>
+    <radialGradient id="s" cx="0.5" cy="0.45" r="0.6">
+      <stop offset="0" stop-color="#ffe08a"/><stop offset="0.55" stop-color="#ffcf4d"/><stop offset="1" stop-color="#f6a623"/>
+    </radialGradient>
+  </defs>
+  <rect x="16" y="16" width="480" height="480" rx="110" fill="url(#bg)" stroke="#1f3a3d" stroke-width="14"/>
+  <g fill="#ffffff" opacity="0.12">
+    <circle cx="70" cy="70" r="6"/><circle cx="116" cy="70" r="6"/><circle cx="162" cy="70" r="6"/><circle cx="208" cy="70" r="6"/><circle cx="254" cy="70" r="6"/><circle cx="300" cy="70" r="6"/><circle cx="346" cy="70" r="6"/><circle cx="392" cy="70" r="6"/><circle cx="438" cy="70" r="6"/><circle cx="70" cy="116" r="6"/><circle cx="116" cy="116" r="6"/><circle cx="162" cy="116" r="6"/><circle cx="208" cy="116" r="6"/><circle cx="254" cy="116" r="6"/><circle cx="300" cy="116" r="6"/><circle cx="346" cy="116" r="6"/><circle cx="392" cy="116" r="6"/><circle cx="438" cy="116" r="6"/><circle cx="70" cy="162" r="6"/><circle cx="116" cy="162" r="6"/><circle cx="162" cy="162" r="6"/><circle cx="208" cy="162" r="6"/><circle cx="254" cy="162" r="6"/><circle cx="300" cy="162" r="6"/><circle cx="346" cy="162" r="6"/><circle cx="392" cy="162" r="6"/><circle cx="438" cy="162" r="6"/>
+  </g>
+  <g transform="translate(256,248)">
+    <g fill="#ffcf4d" stroke="#1f3a3d" stroke-width="7"><path d="M111.1 -14.0 L164.0 0.0 L111.1 14.0 Z"/><path d="M108.0 29.6 L151.5 62.8 L97.3 55.5 Z"/><path d="M88.5 68.6 L116.0 116.0 L68.6 88.5 Z"/><path d="M55.5 97.3 L62.8 151.5 L29.6 108.0 Z"/><path d="M14.0 111.1 L0.0 164.0 L-14.0 111.1 Z"/><path d="M-29.6 108.0 L-62.8 151.5 L-55.5 97.3 Z"/><path d="M-68.6 88.5 L-116.0 116.0 L-88.5 68.6 Z"/><path d="M-97.3 55.5 L-151.5 62.8 L-108.0 29.6 Z"/><path d="M-111.1 14.0 L-164.0 0.0 L-111.1 -14.0 Z"/><path d="M-108.0 -29.6 L-151.5 -62.8 L-97.3 -55.5 Z"/><path d="M-88.5 -68.6 L-116.0 -116.0 L-68.6 -88.5 Z"/><path d="M-55.5 -97.3 L-62.8 -151.5 L-29.6 -108.0 Z"/><path d="M-14.0 -111.1 L-0.0 -164.0 L14.0 -111.1 Z"/><path d="M29.6 -108.0 L62.8 -151.5 L55.5 -97.3 Z"/><path d="M68.6 -88.5 L116.0 -116.0 L88.5 -68.6 Z"/><path d="M97.3 -55.5 L151.5 -62.8 L108.0 -29.6 Z"/></g>
+    <circle r="118" fill="url(#s)" stroke="#1f3a3d" stroke-width="10"/>
+    <circle r="118" fill="none" stroke="#ffffff" stroke-width="5" opacity="0.35" transform="scale(0.86)"/>
+  </g>
+  <!-- little wave at base -->
+  <g stroke="#bfe3ee" stroke-width="9" fill="none" opacity="0.9" stroke-linecap="round">
+    <path d="M120 392 q34 -22 68 0 t68 0 t68 0 t68 0"/>
+  </g>
+</svg>
