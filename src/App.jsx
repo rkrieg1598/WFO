@@ -15,13 +15,8 @@ import Schedule from './pages/Schedule'
 function Gate() {
   const { session, loading } = useAuth()
   if (loading) return <div className="screen"><Loader label="Loading the park…" /></div>
-
-  // Reset password page must be accessible without a session
-  // (user arrives via email link before they're fully signed in)
   if (window.location.pathname === '/reset-password') return <ResetPassword />
-
   if (!session) return <Auth />
-
   return (
     <Routes>
       <Route path="/" element={<Home />} />
