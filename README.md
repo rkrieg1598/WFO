@@ -1,7 +1,7 @@
 # 🌴 White Family Olympics
 
 A retro-Florida companion app for your family games tournament. Players sign up, view live standings, read event rules, share photos, and track their progress. One admin (you) runs the scoreboard.
-
+ 
 Built with **React + Vite + Supabase**. Mobile-first.
 
 ---
