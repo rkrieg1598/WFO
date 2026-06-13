@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Pacifico&amp;family=Bowlby+One+SC&amp;display=swap');
+      .disp{font-family:'Bowlby One SC',sans-serif;font-weight:700}
+      .scr{font-family:'Pacifico',cursive}
+    </style>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2bb8af"/><stop offset="0.55" stop-color="#1ba39c"/><stop offset="1" stop-color="#14807a"/>
+    </linearGradient>
+    <radialGradient id="sunGrad" cx="0.5" cy="0.45" r="0.6">
+      <stop offset="0" stop-color="#ffe08a"/><stop offset="0.55" stop-color="#ffcf4d"/><stop offset="1" stop-color="#f6a623"/>
+    </radialGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8fcfe6"/><stop offset="1" stop-color="#4ba3c7"/>
+    </linearGradient>
+    <clipPath id="badgeClip"><circle cx="300" cy="300" r="226"/></clipPath>
+  </defs>
+
+  <!-- scalloped rim -->
+  <circle cx="580.0" cy="300.0" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="577.2" cy="339.8" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="568.7" cy="378.9" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="554.7" cy="416.3" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="535.6" cy="451.4" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="511.6" cy="483.4" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="483.4" cy="511.6" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="451.4" cy="535.6" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="416.3" cy="554.7" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="378.9" cy="568.7" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="339.8" cy="577.2" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="300.0" cy="580.0" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="260.2" cy="577.2" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="221.1" cy="568.7" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="183.7" cy="554.7" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="148.6" cy="535.6" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="116.6" cy="511.6" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="88.4" cy="483.4" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="64.4" cy="451.4" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="45.3" cy="416.3" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="31.3" cy="378.9" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="22.8" cy="339.8" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="20.0" cy="300.0" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="22.8" cy="260.2" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="31.3" cy="221.1" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="45.3" cy="183.7" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="64.4" cy="148.6" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="88.4" cy="116.6" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="116.6" cy="88.4" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="148.6" cy="64.4" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="183.7" cy="45.3" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="221.1" cy="31.3" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="260.2" cy="22.8" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="300.0" cy="20.0" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="339.8" cy="22.8" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="378.9" cy="31.3" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="416.3" cy="45.3" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="451.4" cy="64.4" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="483.4" cy="88.4" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="511.6" cy="116.6" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="535.6" cy="148.6" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="554.7" cy="183.7" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="568.7" cy="221.1" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/><circle cx="577.2" cy="260.2" r="12" fill="#f7efd8" stroke="#1f3a3d" stroke-width="4"/>
+  <circle cx="300" cy="300" r="270" fill="#f7efd8" stroke="#1f3a3d" stroke-width="6"/>
+  <circle cx="300" cy="300" r="252" fill="none" stroke="#f0563f" stroke-width="11"/>
+  <circle cx="300" cy="300" r="234" fill="none" stroke="#1f3a3d" stroke-width="6"/>
+
+  <!-- inner scene -->
+  <g clip-path="url(#badgeClip)">
+    <rect x="74" y="74" width="452" height="452" fill="url(#sky)"/>
+    <g fill="#ffffff" opacity="0.13">
+      <circle cx="110" cy="110" r="4"/><circle cx="144" cy="110" r="4"/><circle cx="178" cy="110" r="4"/><circle cx="416" cy="110" r="4"/><circle cx="450" cy="110" r="4"/><circle cx="484" cy="110" r="4"/><circle cx="110" cy="144" r="4"/><circle cx="144" cy="144" r="4"/><circle cx="178" cy="144" r="4"/><circle cx="416" cy="144" r="4"/><circle cx="450" cy="144" r="4"/><circle cx="484" cy="144" r="4"/><circle cx="110" cy="178" r="4"/><circle cx="144" cy="178" r="4"/><circle cx="178" cy="178" r="4"/><circle cx="416" cy="178" r="4"/><circle cx="450" cy="178" r="4"/><circle cx="484" cy="178" r="4"/><circle cx="110" cy="212" r="4"/><circle cx="144" cy="212" r="4"/><circle cx="178" cy="212" r="4"/><circle cx="416" cy="212" r="4"/><circle cx="450" cy="212" r="4"/><circle cx="484" cy="212" r="4"/><circle cx="110" cy="246" r="4"/><circle cx="144" cy="246" r="4"/><circle cx="178" cy="246" r="4"/><circle cx="416" cy="246" r="4"/><circle cx="450" cy="246" r="4"/><circle cx="484" cy="246" r="4"/>
+    </g>
+
+    <!-- sun -->
+    <g transform="translate(300,250)">
+      <g fill="#ffcf4d" stroke="#1f3a3d" stroke-width="4"><path d="M87.3 -11.0 L126.0 0.0 L87.3 11.0 Z"/><path d="M84.9 23.2 L116.4 48.2 L76.4 43.6 Z"/><path d="M69.5 53.9 L89.1 89.1 L53.9 69.5 Z"/><path d="M43.6 76.4 L48.2 116.4 L23.2 84.9 Z"/><path d="M11.0 87.3 L0.0 126.0 L-11.0 87.3 Z"/><path d="M-23.2 84.9 L-48.2 116.4 L-43.6 76.4 Z"/><path d="M-53.9 69.5 L-89.1 89.1 L-69.5 53.9 Z"/><path d="M-76.4 43.6 L-116.4 48.2 L-84.9 23.2 Z"/><path d="M-87.3 11.0 L-126.0 0.0 L-87.3 -11.0 Z"/><path d="M-84.9 -23.2 L-116.4 -48.2 L-76.4 -43.6 Z"/><path d="M-69.5 -53.9 L-89.1 -89.1 L-53.9 -69.5 Z"/><path d="M-43.6 -76.4 L-48.2 -116.4 L-23.2 -84.9 Z"/><path d="M-11.0 -87.3 L-0.0 -126.0 L11.0 -87.3 Z"/><path d="M23.2 -84.9 L48.2 -116.4 L43.6 -76.4 Z"/><path d="M53.9 -69.5 L89.1 -89.1 L69.5 -53.9 Z"/><path d="M76.4 -43.6 L116.4 -48.2 L84.9 -23.2 Z"/></g>
+      <circle r="92" fill="url(#sunGrad)" stroke="#1f3a3d" stroke-width="6"/>
+      <circle r="92" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.35" transform="scale(0.86)"/>
+    </g>
+
+    <!-- water -->
+    <rect x="74" y="396" width="452" height="130" fill="url(#water)"/>
+    <g stroke="#1f3a3d" stroke-width="4" fill="none" opacity="0.5">
+      <path d="M74 420 q19 -11 38 0 t38 0 t38 0 t38 0 t38 0 t38 0 t38 0 t38 0 t38 0 t38 0 t38 0 t38 0"/>
+      <path d="M74 448 q19 -11 38 0 t38 0 t38 0 t38 0 t38 0 t38 0 t38 0 t38 0 t38 0 t38 0 t38 0 t38 0"/>
+      <path d="M74 476 q19 -11 38 0 t38 0 t38 0 t38 0 t38 0 t38 0 t38 0 t38 0 t38 0 t38 0 t38 0 t38 0"/>
+    </g>
+
+    <!-- left palm -->
+    <g transform="translate(138,408)">
+      <path d="M0 0 C -6 -60 -4 -110 8 -152" stroke="#0d5c57" stroke-width="13" fill="none" stroke-linecap="round"/>
+      <g fill="#1ba39c" stroke="#0d5c57" stroke-width="4">
+        <path d="M8 -152 C -38 -172 -78 -166 -106 -146 C -70 -150 -34 -148 8 -152Z"/>
+        <path d="M8 -152 C -26 -190 -18 -228 4 -256 C -8 -216 0 -182 8 -152Z"/>
+        <path d="M8 -152 C 46 -174 86 -170 112 -150 C 76 -154 40 -150 8 -152Z"/>
+        <path d="M8 -152 C 40 -192 34 -228 12 -258 C 22 -218 14 -184 8 -152Z"/>
+      </g>
+    </g>
+    <!-- right palm -->
+    <g transform="translate(468,408) scale(-1,1)">
+      <path d="M0 0 C -5 -50 -4 -92 7 -126" stroke="#0d5c57" stroke-width="11" fill="none" stroke-linecap="round"/>
+      <g fill="#2bb8af" stroke="#0d5c57" stroke-width="4">
+        <path d="M7 -126 C -34 -144 -68 -138 -92 -120 C -60 -124 -30 -122 7 -126Z"/>
+        <path d="M7 -126 C -22 -160 -14 -196 6 -220 C -4 -184 2 -156 7 -126Z"/>
+        <path d="M7 -126 C 42 -148 76 -144 100 -126 C 66 -130 36 -126 7 -126Z"/>
+      </g>
+    </g>
+
+    <!-- WHITE FAMILY arched -->
+    <path id="topArc" d="M150 300 A150 150 0 0 1 450 300" fill="none"/>
+    <text class="disp" font-size="50" letter-spacing="1">
+      <textPath href="#topArc" startOffset="50%" text-anchor="middle"
+        fill="#f7efd8" stroke="#1f3a3d" stroke-width="2.4" paint-order="stroke">WHITE&#160;FAMILY</textPath>
+    </text>
+  </g>
+
+  <!-- ribbon + OLYMPICS -->
+  <g transform="translate(300,372)">
+    <path d="M-246 -22 L-214 -38 L-206 -8 L-246 14 Z" fill="#d33d28" stroke="#1f3a3d" stroke-width="6"/>
+    <path d="M246 -22 L214 -38 L206 -8 L246 14 Z" fill="#d33d28" stroke="#1f3a3d" stroke-width="6"/>
+    <path d="M-210 -38 L210 -38 L192 0 L210 38 L-210 38 L-192 0 Z" fill="#f0563f" stroke="#1f3a3d" stroke-width="6"/>
+    <text x="0" y="17" text-anchor="middle" class="disp" font-size="54" letter-spacing="2"
+      fill="#f7efd8" stroke="#1f3a3d" stroke-width="2.2" paint-order="stroke">OLYMPICS</text>
+  </g>
+
+  <!-- tagline -->
+  <text x="300" y="446" text-anchor="middle" class="scr" font-size="30"
+    fill="#ffcf4d" stroke="#1f3a3d" stroke-width="0.8" paint-order="stroke">est. summer of champions</text>
+</svg>
