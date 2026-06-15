@@ -7,10 +7,11 @@ import { fetchPlayers, assignPlaces, pointsForPlace } from '../lib/scoring'
 import BracketManager from '../components/BracketManager'
 
 const TABS = [
-  { key: 'scores',  label: '🏅 Scores'  },
-  { key: 'rules',   label: '📋 Rules'   },
-  { key: 'teams',   label: '👯 Teams'   },
-  { key: 'settings',label: '⚙️ Settings'},
+  { key: 'scores',    label: '🏅 Scores'    },
+  { key: 'rules',     label: '📋 Rules'     },
+  { key: 'teams',     label: '👯 Teams'     },
+  { key: 'scavenger', label: '🔍 Scavenger' },
+  { key: 'settings',  label: '⚙️ Settings'  },
 ]
 
 export default function Admin() {
@@ -31,16 +32,17 @@ export default function Admin() {
         <h1 className="postcard-title" style={{ fontSize: 32 }}>🛠️ Control Room</h1>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 14 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, marginBottom: 14 }}>
         {TABS.map((t) => (
-          <button key={t.key} onClick={() => setTab(t.key)} className={`btn btn-sm ${tab === t.key ? 'btn-coral' : 'btn-ghost'}`} style={{ whiteSpace: 'nowrap', width: '100%' }}>{t.label}</button>
+          <button key={t.key} onClick={() => setTab(t.key)} className={`btn btn-sm ${tab === t.key ? 'btn-coral' : 'btn-ghost'}`} style={{ whiteSpace: 'nowrap', width: '100%', fontSize: 11, padding: '8px 4px' }}>{t.label}</button>
         ))}
       </div>
 
-      {tab === 'scores'   && <ScoresTab players={players} />}
-      {tab === 'rules'    && <RulesTab />}
-      {tab === 'teams'    && <TeamsTab  players={players} />}
-      {tab === 'settings' && <SettingsTab />}
+      {tab === 'scores'    && <ScoresTab players={players} />}
+      {tab === 'rules'     && <RulesTab />}
+      {tab === 'teams'     && <TeamsTab  players={players} />}
+      {tab === 'scavenger' && <ScavengerTab />}
+      {tab === 'settings'  && <SettingsTab />}
 
     </div>
   )
@@ -653,4 +655,274 @@ function SettingsTab() {
 }
 
 const ordinal = (n) => `${n}${['th', 'st', 'nd', 'rd'][(n % 100 - 20) % 10] || ['th', 'st', 'nd', 'rd'][n] || 'th'}`
+
+/* ---------- SCAVENGER ---------- */
+const SCAV_PLACES = ['Grand Floridian', 'Contemporary', 'Polynesian']
+const SCAV_DIFFICULTIES = [
+  { key: 'easy',   label: 'Easy',   emoji: '🟢' },
+  { key: 'medium', label: 'Medium', emoji: '🟡' },
+  { key: 'hard',   label: 'Hard',   emoji: '🔴' },
+]
+const SCAV_NEEDED = { easy: 2, medium: 3, hard: 1 } // per place, per team
+const TEAM_NAMES_SCAV = ['Team 1', 'Team 2', 'Team 3', 'Team 4']
+const TEAM_COLORS_SCAV = ['var(--coral)', 'var(--teal)', 'var(--gold)', 'var(--sky-deep)']
+
+function ScavengerTab() {
+  const [items, setItems] = useState([])
+  const [assignments, setAssignments] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [place, setPlace] = useState(SCAV_PLACES[0])
+  const [difficulty, setDifficulty] = useState('easy')
+  const [text, setText] = useState('')
+  const [msg, setMsg] = useState('')
+  const [filterPlace, setFilterPlace] = useState('all')
+
+  async function load() {
+    const [{ data: itemData }, { data: assignData }] = await Promise.all([
+      supabase.from('scavenger_items').select('*').order('place').order('difficulty').order('created_at'),
+      supabase.from('scavenger_assignments').select('*'),
+    ])
+    setItems(itemData || [])
+    setAssignments(assignData || [])
+    setLoading(false)
+  }
+
+  useEffect(() => { load() }, [])
+
+  async function addItem() {
+    if (!text.trim()) { setMsg('⚠️ Enter the riddle/item text first.'); setTimeout(() => setMsg(''), 2500); return }
+    await supabase.from('scavenger_items').insert({ place, difficulty, text: text.trim() })
+    setText('')
+    setMsg('✅ Item added!')
+    setTimeout(() => setMsg(''), 1500)
+    load()
+  }
+
+  async function deleteItem(id) {
+    await supabase.from('scavenger_items').delete().eq('id', id)
+    load()
+  }
+
+  // counts per place/difficulty
+  function countFor(p, d) {
+    return items.filter((i) => i.place === p && i.difficulty === d).length
+  }
+
+  // can we distribute? need at least SCAV_NEEDED * 4 teams of each place/difficulty
+  const shortages = []
+  SCAV_PLACES.forEach((p) => {
+    SCAV_DIFFICULTIES.forEach(({ key }) => {
+      const needed = SCAV_NEEDED[key] * 4
+      const have = countFor(p, key)
+      if (have < needed) shortages.push({ place: p, difficulty: key, have, needed })
+    })
+  })
+  const canDistribute = shortages.length === 0
+  const alreadyDistributed = assignments.length > 0
+
+  function shuffle(arr) {
+    const a = [...arr]
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[a[i], a[j]] = [a[j], a[i]]
+    }
+    return a
+  }
+
+  async function distribute() {
+    if (!canDistribute) return
+    setMsg('🎲 Distributing…')
+
+    // For each place + difficulty, shuffle items and deal out the needed amount per team
+    const rows = []
+    for (let teamNo = 1; teamNo <= 4; teamNo++) {
+      SCAV_PLACES.forEach((p) => {
+        SCAV_DIFFICULTIES.forEach(({ key }) => {
+          const pool = shuffle(items.filter((i) => i.place === p && i.difficulty === key))
+          const need = SCAV_NEEDED[key]
+          for (let n = 0; n < need; n++) {
+            const item = pool[(teamNo - 1) * need + n]
+            if (item) rows.push({ team_no: teamNo, item_id: item.id, place: p, difficulty: key })
+          }
+        })
+      })
+    }
+
+    await supabase.from('scavenger_assignments').delete().neq('id', 0)
+    if (rows.length) await supabase.from('scavenger_assignments').insert(rows)
+    setMsg('🎉 Distributed to all 4 teams!')
+    setTimeout(() => setMsg(''), 2500)
+    load()
+  }
+
+  async function clearDistribution() {
+    await supabase.from('scavenger_assignments').delete().neq('id', 0)
+    setMsg('Distribution cleared.')
+    setTimeout(() => setMsg(''), 1500)
+    load()
+  }
+
+  if (loading) return <div className="card-flat muted center" style={{ fontSize: 13 }}>Loading…</div>
+
+  const itemById = (id) => items.find((i) => i.id === id)
+  const filteredItems = filterPlace === 'all' ? items : items.filter((i) => i.place === filterPlace)
+
+  return (
+    <div className="stack">
+
+      {/* Add new item */}
+      <div className="card-flat" style={{ background: 'var(--powder)' }}>
+        <div className="eyebrow" style={{ marginBottom: 8 }}>🔍 Add Riddle / Item</div>
+
+        <div className="row" style={{ gap: 8, marginBottom: 8 }}>
+          <select className="input" style={{ flex: 1, fontSize: 12 }} value={place} onChange={(e) => setPlace(e.target.value)}>
+            {SCAV_PLACES.map((p) => <option key={p} value={p}>{p}</option>)}
+          </select>
+          <select className="input" style={{ flex: 1, fontSize: 12 }} value={difficulty} onChange={(e) => setDifficulty(e.target.value)}>
+            {SCAV_DIFFICULTIES.map((d) => <option key={d.key} value={d.key}>{d.emoji} {d.label}</option>)}
+          </select>
+        </div>
+
+        <textarea
+          className="textarea"
+          placeholder="Enter the riddle or item description…"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          style={{ marginBottom: 8 }}
+        />
+
+        <button onClick={addItem} className="btn btn-coral">➕ Add to Item Bank</button>
+      </div>
+
+      {/* Progress / shortages */}
+      <div className="card-flat">
+        <div className="eyebrow" style={{ marginBottom: 8 }}>📊 Item Bank Status</div>
+        <p className="muted" style={{ fontSize: 12, marginBottom: 10 }}>
+          Each team gets {SCAV_NEEDED.easy} easy + {SCAV_NEEDED.medium} medium + {SCAV_NEEDED.hard} hard per place
+          ({SCAV_NEEDED.easy + SCAV_NEEDED.medium + SCAV_NEEDED.hard} items × {SCAV_PLACES.length} places = {(SCAV_NEEDED.easy + SCAV_NEEDED.medium + SCAV_NEEDED.hard) * SCAV_PLACES.length} per team).
+        </p>
+        {SCAV_PLACES.map((p) => (
+          <div key={p} style={{ marginBottom: 8 }}>
+            <div className="display" style={{ fontSize: 12, marginBottom: 4 }}>{p}</div>
+            <div className="row" style={{ gap: 6 }}>
+              {SCAV_DIFFICULTIES.map(({ key, label, emoji }) => {
+                const have = countFor(p, key)
+                const needed = SCAV_NEEDED[key] * 4
+                const ok = have >= needed
+                return (
+                  <span key={key} className="pill" style={{
+                    background: ok ? 'var(--teal)' : 'var(--coral)',
+                    color: 'var(--cream)', fontSize: 9,
+                  }}>
+                    {emoji} {label}: {have}/{needed}
+                  </span>
+                )
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Distribute */}
+      <div className="card" style={{ background: alreadyDistributed ? 'var(--gold)' : 'var(--teal)', color: alreadyDistributed ? 'var(--ink)' : 'var(--cream)' }}>
+        <div className="eyebrow" style={{ color: alreadyDistributed ? 'var(--coral-deep)' : 'var(--sun)', marginBottom: 8 }}>
+          {alreadyDistributed ? '✅ Already Distributed' : '🎲 Distribute to Teams'}
+        </div>
+        {!canDistribute && !alreadyDistributed && (
+          <p style={{ fontSize: 12, marginBottom: 10 }}>
+            ⚠️ Not enough items yet. Add more to the item bank above (see shortages highlighted in red).
+          </p>
+        )}
+        {canDistribute && !alreadyDistributed && (
+          <p style={{ fontSize: 12, marginBottom: 10 }}>
+            Ready! Each of the 4 teams will randomly receive {SCAV_NEEDED.easy} easy, {SCAV_NEEDED.medium} medium, and {SCAV_NEEDED.hard} hard item per place.
+          </p>
+        )}
+        {alreadyDistributed && (
+          <p style={{ fontSize: 12, marginBottom: 10 }}>
+            Items have been randomly assigned to all 4 teams. Re-distributing will reshuffle and replace the current assignments.
+          </p>
+        )}
+        <div className="row" style={{ gap: 8 }}>
+          <button onClick={distribute} disabled={!canDistribute} className="btn btn-gold" style={{ flex: 2, opacity: canDistribute ? 1 : 0.5 }}>
+            {alreadyDistributed ? '🔁 Re-Distribute' : '🎲 Distribute Now'}
+          </button>
+          {alreadyDistributed && (
+            <button onClick={clearDistribution} className="btn btn-ghost btn-sm" style={{ flex: 1, color: alreadyDistributed ? 'var(--ink)' : 'var(--cream)' }}>🗑️ Clear</button>
+          )}
+        </div>
+      </div>
+
+      {/* Distributed assignments preview */}
+      {alreadyDistributed && (
+        <div className="card-flat">
+          <div className="eyebrow" style={{ marginBottom: 10 }}>📋 Team Assignments</div>
+          <div className="stack">
+            {[1, 2, 3, 4].map((teamNo) => {
+              const teamItems = assignments.filter((a) => a.team_no === teamNo)
+              return (
+                <div key={teamNo} className="card" style={{ padding: 12, borderColor: TEAM_COLORS_SCAV[teamNo - 1] }}>
+                  <div className="row" style={{ gap: 8, marginBottom: 8 }}>
+                    <div style={{ width: 12, height: 12, borderRadius: '50%', background: TEAM_COLORS_SCAV[teamNo - 1], border: '2px solid var(--ink)' }} />
+                    <span className="display" style={{ fontSize: 13 }}>{TEAM_NAMES_SCAV[teamNo - 1]}</span>
+                  </div>
+                  {SCAV_PLACES.map((p) => {
+                    const placeItems = teamItems.filter((a) => a.place === p)
+                    if (!placeItems.length) return null
+                    return (
+                      <div key={p} style={{ marginBottom: 8 }}>
+                        <div className="muted" style={{ fontSize: 11, fontWeight: 700, marginBottom: 4 }}>{p}</div>
+                        {placeItems.map((a) => {
+                          const item = itemById(a.item_id)
+                          const diffMeta = SCAV_DIFFICULTIES.find((d) => d.key === a.difficulty)
+                          return (
+                            <div key={a.id} className="row" style={{ gap: 6, marginBottom: 3, alignItems: 'flex-start' }}>
+                              <span style={{ fontSize: 12, flexShrink: 0 }}>{diffMeta?.emoji}</span>
+                              <span style={{ fontSize: 12, lineHeight: 1.4 }}>{item ? item.text : '(deleted item)'}</span>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    )
+                  })}
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Item bank list */}
+      <div className="card-flat">
+        <div className="between" style={{ marginBottom: 10 }}>
+          <div className="eyebrow">📚 Item Bank ({items.length})</div>
+          <select className="input" style={{ width: 140, fontSize: 11 }} value={filterPlace} onChange={(e) => setFilterPlace(e.target.value)}>
+            <option value="all">All Places</option>
+            {SCAV_PLACES.map((p) => <option key={p} value={p}>{p}</option>)}
+          </select>
+        </div>
+        {filteredItems.length === 0 && <p className="muted" style={{ fontSize: 13 }}>No items yet — add some above!</p>}
+        <div className="stack">
+          {filteredItems.map((item) => {
+            const diffMeta = SCAV_DIFFICULTIES.find((d) => d.key === item.difficulty)
+            return (
+              <div key={item.id} className="between" style={{ padding: '8px 10px', background: 'rgba(255,255,255,.6)', borderRadius: 10, border: '1.5px solid rgba(31,58,61,.15)', gap: 8 }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="row" style={{ gap: 6, marginBottom: 3 }}>
+                    <span className="pill pill-teal" style={{ fontSize: 8 }}>{item.place}</span>
+                    <span className="pill" style={{ fontSize: 8, background: '#fff' }}>{diffMeta?.emoji} {diffMeta?.label}</span>
+                  </div>
+                  <div style={{ fontSize: 12, lineHeight: 1.4 }}>{item.text}</div>
+                </div>
+                <button onClick={() => deleteItem(item.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, opacity: 0.6, flexShrink: 0 }}>🗑️</button>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      {msg && <div className="pill pill-gold" style={{ width: '100%', justifyContent: 'center' }}>{msg}</div>}
+    </div>
+  )
+}
 
