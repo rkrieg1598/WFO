@@ -96,11 +96,14 @@ function ScoresTab({ players }) {
     const ranked = assignPlaces(eventKey, rawScores)
     if (ranked.length === 0) { setMsg('⚠️ Enter at least one score first.'); return }
     setMsg('Saving…')
-    await supabase.from('scores').delete().eq('event_key', eventKey)
-    await supabase.from('scores').insert(
+    const del = await supabase.from('scores').delete().eq('event_key', eventKey)
+    if (del.error) { setMsg('❌ ' + del.error.message); return }
+    const ins = await supabase.from('scores').insert(
       ranked.map(({ player_id, raw_score, place }) => ({ event_key: eventKey, player_id, raw_score, place }))
     )
-    await supabase.from('results').upsert({ event_key: eventKey, completed: true }, { onConflict: 'event_key' })
+    if (ins.error) { setMsg('❌ ' + ins.error.message); return }
+    const res = await supabase.from('results').upsert({ event_key: eventKey, completed: true }, { onConflict: 'event_key' })
+    if (res.error) { setMsg('❌ ' + res.error.message); return }
     setMsg('✅ Scores saved — places auto-assigned!')
     setTimeout(() => setMsg(''), 2500)
   }
@@ -109,11 +112,12 @@ function ScoresTab({ players }) {
     const entries = Object.entries(bonuses).filter(([, v]) => v.points && Number(v.points) !== 0)
     if (entries.length === 0) { setMsg('⚠️ Enter at least one bonus point value.'); return }
     setMsg('Saving…')
-    await supabase.from('bonus_points').insert(
+    const ins = await supabase.from('bonus_points').insert(
       entries.map(([player_id, v]) => ({
         player_id, points: Number(v.points), reason: v.reason?.trim() || null,
       }))
     )
+    if (ins.error) { setMsg('❌ ' + ins.error.message); return }
     const { data } = await supabase.from('bonus_points').select('*').order('created_at', { ascending: false })
     setSavedBonuses(data || [])
     setBonuses({})
@@ -444,12 +448,16 @@ function TeamsTab({ players }) {
     }
     setMsg('Saving…')
     // clear all team assignments first
-    await supabase.from('profiles').update({ team_no: null, team_slot: null }).neq('id', '00000000-0000-0000-0000-000000000000')
+    const clear = await supabase.from('profiles').update({ team_no: null, team_slot: null }).neq('id', '00000000-0000-0000-0000-000000000000')
+    if (clear.error) { setMsg('❌ ' + clear.error.message); return }
     // save each slot
     for (let t = 1; t <= 4; t++) {
       for (let s = 0; s < 2; s++) {
         const pid = teams[t][s]
-        if (pid) await supabase.from('profiles').update({ team_no: t, team_slot: s }).eq('id', pid)
+        if (pid) {
+          const upd = await supabase.from('profiles').update({ team_no: t, team_slot: s }).eq('id', pid)
+          if (upd.error) { setMsg('❌ ' + upd.error.message); return }
+        }
       }
     }
     setSaved(true)
