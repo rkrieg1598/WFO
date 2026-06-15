@@ -4,9 +4,9 @@ import { TopBar, Loader } from '../components/UI'
 import { supabase } from '../lib/supabase'
 
 const DIFF_META = {
-  easy:   { label: 'Easy',   emoji: '🟢' },
-  medium: { label: 'Medium', emoji: '🟡' },
-  hard:   { label: 'Hard',   emoji: '🔴' },
+  easy:   { label: 'Easy',   emoji: '\uD83D\uDFE2' },
+  medium: { label: 'Medium', emoji: '\uD83D\uDFE1' },
+  hard:   { label: 'Hard',   emoji: '\uD83D\uDD34' },
 }
 const PLACES = ['Grand Floridian', 'Contemporary', 'Polynesian']
 const TEAM_NAMES  = ['Team 1', 'Team 2', 'Team 3', 'Team 4']
@@ -67,7 +67,7 @@ export default function Scavenger() {
     load()
   }
 
-  if (loading) return <div className="screen"><Loader label="Checking the vault…" /></div>
+  if (loading) return <div className="screen"><Loader label="Checking the vault\u2026" /></div>
 
   // --- Locked ---
   if (!unlocked) {
@@ -75,13 +75,13 @@ export default function Scavenger() {
       <div className="screen">
         <TopBar title="scavenger hunt" />
         <div className="card rise rise-1 center" style={{ marginTop: 40, background: 'var(--cream-soft)' }}>
-          <div style={{ fontSize: 72, animation: 'swayy 2s ease-in-out infinite' }}>🔒</div>
+          <div style={{ fontSize: 72, animation: 'swayy 2s ease-in-out infinite' }}>{'\uD83D\uDD12'}</div>
           <h1 className="postcard-title mt16" style={{ fontSize: 30 }}>Locked!</h1>
           <p className="muted mt8" style={{ lineHeight: 1.5 }}>
             The Scavenger Hunt hasn't started yet. This page will unlock when the admin
-            kicks off the hunt. Get your camera ready! 🔍
+            kicks off the hunt. Get your camera ready! {'\uD83D\uDD0D'}
           </p>
-          <div className="pill pill-teal mt16">👯 4 teams of 2 · 8 / 6 / 4 / 2 pts</div>
+          <div className="pill pill-teal mt16">{'\uD83D\uDC6F'} 4 teams of 2 \u00B7 8 / 6 / 4 / 2 pts</div>
         </div>
       </div>
     )
@@ -93,7 +93,7 @@ export default function Scavenger() {
       <div className="screen">
         <TopBar title="scavenger hunt" />
         <div className="card rise rise-1 center" style={{ marginTop: 40, background: 'var(--cream-soft)' }}>
-          <div style={{ fontSize: 64 }}>🤔</div>
+          <div style={{ fontSize: 64 }}>{'\uD83E\uDD14'}</div>
           <h1 className="postcard-title mt16" style={{ fontSize: 28 }}>No Team Yet</h1>
           <p className="muted mt8" style={{ lineHeight: 1.5 }}>
             You haven't been assigned to a Scavenger Hunt team. Ask the admin to add you
@@ -112,11 +112,11 @@ export default function Scavenger() {
       <div className="screen">
         <TopBar title="scavenger hunt" />
         <div className="card rise rise-1 center" style={{ marginTop: 40, background: 'var(--cream-soft)' }}>
-          <div style={{ fontSize: 64 }}>🎲</div>
+          <div style={{ fontSize: 64 }}>{'\uD83C\uDFB2'}</div>
           <h1 className="postcard-title mt16" style={{ fontSize: 28 }}>Not Distributed Yet</h1>
           <p className="muted mt8" style={{ lineHeight: 1.5 }}>
             The hunt is unlocked, but items haven't been distributed to teams yet.
-            Hang tight — your list will appear here as soon as the admin distributes!
+            Hang tight \u2014 your list will appear here as soon as the admin distributes!
           </p>
         </div>
       </div>
@@ -140,7 +140,7 @@ export default function Scavenger() {
       <TopBar title="scavenger hunt" />
 
       <div className="center rise rise-1" style={{ marginBottom: 14 }}>
-        <h1 className="postcard-title" style={{ fontSize: 32 }}>🔍 The Hunt</h1>
+        <h1 className="postcard-title" style={{ fontSize: 32 }}>{'\uD83D\uDD0D'} The Hunt</h1>
         <div className="pill mt8" style={{ background: teamColor, color: 'var(--cream)' }}>
           {TEAM_NAMES[teamNo - 1]}
         </div>
@@ -155,7 +155,7 @@ export default function Scavenger() {
               {doneCount} / {totalCount}
             </div>
           </div>
-          <div style={{ fontSize: 44 }}>{doneCount === totalCount ? '🏆' : '🔎'}</div>
+          <div style={{ fontSize: 44 }}>{doneCount === totalCount ? '\uD83C\uDFC6' : '\uD83D\uDD0E'}</div>
         </div>
         <div style={{
           marginTop: 10, height: 10, borderRadius: 999, background: 'rgba(255,255,255,.25)',
@@ -205,7 +205,7 @@ export default function Scavenger() {
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       color: 'var(--cream)', fontFamily: 'var(--font-display)', fontSize: 13,
                     }}>
-                      {checked ? '✓' : ''}
+                      {checked ? '\u2713' : ''}
                     </div>
 
                     <div style={{ flex: 1, minWidth: 0 }}>
@@ -235,10 +235,10 @@ export default function Scavenger() {
 
       {doneCount === totalCount && (
         <div className="card center" style={{ background: 'var(--gold)', marginTop: 4 }}>
-          <div style={{ fontSize: 48 }}>🎉</div>
+          <div style={{ fontSize: 48 }}>{'\uD83C\uDF89'}</div>
           <div className="postcard-title mt8" style={{ fontSize: 22 }}>Hunt Complete!</div>
           <p className="muted mt8" style={{ fontSize: 13 }}>
-            Your team found every item — nice work! Let the admin know you're done.
+            Your team found every item \u2014 nice work! Let the admin know you're done.
           </p>
         </div>
       )}
