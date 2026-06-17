@@ -50,23 +50,27 @@ export default function Admin() {
 
 /* ---------- SCORES ---------- */
 const BRACKET_EVENT_KEYS = ['redneck_hs']
+const TEAM_PLACE_EVENT_KEYS = ['scavenger']
 const BONUS_KEY = '__bonus__'
 
 function ScoresTab({ players }) {
   const [eventKey, setEventKey] = useState(EVENTS[0].key)
   const [rawScores, setRawScores] = useState({})
   const [bracketPlacements, setBracketPlacements] = useState(null)
-  const [bonuses, setBonuses] = useState({})   // player_id -> { points, reason }
+  const [teamPlaces, setTeamPlaces] = useState({ 1: '', 2: '', 3: '', 4: '' })
+  const [bonuses, setBonuses] = useState({})
   const [savedBonuses, setSavedBonuses] = useState([])
   const [msg, setMsg] = useState('')
 
   const isBonus = eventKey === BONUS_KEY
   const isBracketEvent = BRACKET_EVENT_KEYS.includes(eventKey)
+  const isTeamPlaceEvent = TEAM_PLACE_EVENT_KEYS.includes(eventKey)
   const ev = EVENTS.find((e) => e.key === eventKey)
 
   useEffect(() => {
     setRawScores({})
     setBracketPlacements(null)
+    setTeamPlaces({ 1: '', 2: '', 3: '', 4: '' })
     setBonuses({})
 
     if (isBonus) {
@@ -78,6 +82,18 @@ function ScoresTab({ players }) {
         const m = {}
         ;(data || []).forEach((s) => { m[s.player_id] = s.place })
         setBracketPlacements(Object.keys(m).length > 0 ? m : null)
+      })
+    } else if (isTeamPlaceEvent) {
+      // load existing team placements from scores
+      supabase.from('scores').select('*').eq('event_key', eventKey).then(({ data }) => {
+        if (!data || data.length === 0) return
+        // find one row per team_no and get its place
+        const seen = {}
+        data.forEach((s) => {
+          const p = players.find((pl) => pl.id === s.player_id)
+          if (p?.team_no && !seen[p.team_no]) seen[p.team_no] = s.place
+        })
+        setTeamPlaces((prev) => ({ ...prev, ...seen }))
       })
     } else {
       supabase.from('scores').select('*').eq('event_key', eventKey).then(({ data }) => {
@@ -108,7 +124,28 @@ function ScoresTab({ players }) {
     setTimeout(() => setMsg(''), 2500)
   }
 
-  async function saveBonuses() {
+  async function saveTeamPlaces() {
+    const entries = Object.entries(teamPlaces).filter(([, v]) => v !== '' && v !== null)
+    if (entries.length === 0) { setMsg('\u26A0\uFE0F Assign at least one team place first.'); return }
+    setMsg('Saving\u2026')
+    const del = await supabase.from('scores').delete().eq('event_key', eventKey)
+    if (del.error) { setMsg('\u274C ' + del.error.message); return }
+    // build one row per player on each team
+    const rows = []
+    entries.forEach(([teamNo, place]) => {
+      const teamPlayers = players.filter((p) => p.team_no === Number(teamNo))
+      teamPlayers.forEach((p) => {
+        rows.push({ event_key: eventKey, player_id: p.id, place: Number(place), raw_score: null })
+      })
+    })
+    if (rows.length === 0) { setMsg('\u26A0\uFE0F No players found for the selected teams. Make sure teams are assigned.'); return }
+    const ins = await supabase.from('scores').insert(rows)
+    if (ins.error) { setMsg('\u274C ' + ins.error.message); return }
+    const res = await supabase.from('results').upsert({ event_key: eventKey, completed: true }, { onConflict: 'event_key' })
+    if (res.error) { setMsg('\u274C ' + res.error.message); return }
+    setMsg('\u2705 Scavenger Hunt places saved!')
+    setTimeout(() => setMsg(''), 2500)
+  }
     const entries = Object.entries(bonuses).filter(([, v]) => v.points && Number(v.points) !== 0)
     if (entries.length === 0) { setMsg('⚠️ Enter at least one bonus point value.'); return }
     setMsg('Saving…')
@@ -158,6 +195,10 @@ function ScoresTab({ players }) {
         ) : isBracketEvent ? (
           <div className="pill pill-gold mt8" style={{ fontSize: 11 }}>
             🎯 Bracket event — scores filled automatically from bracket results
+          </div>
+        ) : isTeamPlaceEvent ? (
+          <div className="pill pill-teal mt8" style={{ fontSize: 11 }}>
+            👯 Team event — assign 1st/2nd/3rd/4th place to each team manually
           </div>
         ) : (
           <div className="pill pill-teal mt8" style={{ fontSize: 11 }}>
@@ -236,6 +277,49 @@ function ScoresTab({ players }) {
               ))}
             </div>
           )}
+          {msg && <div className="pill pill-gold" style={{ width: '100%', justifyContent: 'center' }}>{msg}</div>}
+        </>
+      )}
+
+      {/* ── TEAM PLACE EVENT VIEW (Scavenger Hunt) ── */}
+      {isTeamPlaceEvent && (
+        <>
+          {[1, 2, 3, 4].map((teamNo) => {
+            const teamPlayers = players.filter((p) => p.team_no === teamNo)
+            const pts = teamPlaces[teamNo] ? [8, 6, 4, 2][Number(teamPlaces[teamNo]) - 1] : null
+            return (
+              <div key={teamNo} className="card-flat between" style={{ gap: 10 }}>
+                <div style={{ flex: 1 }}>
+                  <div className="display" style={{ fontSize: 13, marginBottom: 4 }}>
+                    Team {teamNo}
+                  </div>
+                  <div className="muted" style={{ fontSize: 11 }}>
+                    {teamPlayers.length > 0
+                      ? teamPlayers.map((p) => p.name).join(' & ')
+                      : 'No players assigned'}
+                  </div>
+                </div>
+                <div className="row" style={{ gap: 8, flexShrink: 0 }}>
+                  <select
+                    className="input"
+                    style={{ width: 110, fontSize: 12 }}
+                    value={teamPlaces[teamNo] ?? ''}
+                    onChange={(e) => setTeamPlaces({ ...teamPlaces, [teamNo]: e.target.value })}
+                  >
+                    <option value="">-- Place --</option>
+                    <option value="1">🥇 1st</option>
+                    <option value="2">🥈 2nd</option>
+                    <option value="3">🥉 3rd</option>
+                    <option value="4">4th</option>
+                  </select>
+                  {pts !== null && (
+                    <span className="pill pill-gold" style={{ fontSize: 10 }}>{pts} pts</span>
+                  )}
+                </div>
+              </div>
+            )
+          })}
+          <button onClick={saveTeamPlaces} className="btn btn-coral">💾 Save Scavenger Places</button>
           {msg && <div className="pill pill-gold" style={{ width: '100%', justifyContent: 'center' }}>{msg}</div>}
         </>
       )}
