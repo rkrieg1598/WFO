@@ -146,6 +146,8 @@ function ScoresTab({ players }) {
     setMsg('\u2705 Scavenger Hunt places saved!')
     setTimeout(() => setMsg(''), 2500)
   }
+
+  async function saveBonuses() {
     const entries = Object.entries(bonuses).filter(([, v]) => v.points && Number(v.points) !== 0)
     if (entries.length === 0) { setMsg('⚠️ Enter at least one bonus point value.'); return }
     setMsg('Saving…')
