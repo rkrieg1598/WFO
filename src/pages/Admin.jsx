@@ -49,7 +49,7 @@ export default function Admin() {
 }
 
 /* ---------- SCORES ---------- */
-const BRACKET_EVENT_KEYS = ['air_hockey', 'redneck_hs']
+const BRACKET_EVENT_KEYS = ['redneck_hs']
 const BONUS_KEY = '__bonus__'
 
 function ScoresTab({ players }) {
